@@ -13,6 +13,7 @@ public class SquareSpawner : MonoBehaviour
     public Vector2[] points;
 
     public float scale = 2f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,7 +41,7 @@ public class SquareSpawner : MonoBehaviour
             for (int i = 0; i < points.Length; i++)
             {
                 Vector2 pos = points[i] + mousePos;
-                Debug.DrawLine(pos, points[(i + 1) % points.Length] + mousePos, Color.white, 5f);
+                Debug.DrawLine(pos, points[(i + 1) % points.Length] + mousePos, Color.white, 1000f);
             }
 
         }
