@@ -244,6 +244,8 @@ MonoBehaviour:
   point2: {x: 1, y: -1}
   point3: {x: -1, y: -1}
   point4: {x: -1, y: 1}
+  points: []
+  scale: 2
 --- !u!4 &1692473290
 Transform:
   m_ObjectHideFlags: 0
