@@ -39,12 +39,14 @@ public class RowGeneration : MonoBehaviour
             }
             for (int i = 0; i < points.Length; i++)
             {
-                points[i].x += 2; // Move the next square to the right
+                //Move the next square to the right
+                points[i].x += 2; 
             }
         }
         for(int i = 0; i < points.Length; i++)
         {
-            points[i].x -= 2 * numberOfObjects; // Reset the position of the points for the next draw
+            //Reset the position of the points for the next draw
+            points[i].x -= 2 * numberOfObjects; 
         }
 
     }
@@ -64,3 +66,4 @@ public class RowGeneration : MonoBehaviour
         }
     }
 }
+
