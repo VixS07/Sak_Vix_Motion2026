@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 
 public class SquareSpawner : MonoBehaviour
 {
@@ -21,14 +20,11 @@ public class SquareSpawner : MonoBehaviour
     {
         //making the vectors into a list 
         points = new Vector2[] { point1, point2, point3, point4 };
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
-
         //making the square follow the mouse position using a for loop
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         for(int i = 0; i < points.Length; i++)
@@ -49,7 +45,6 @@ public class SquareSpawner : MonoBehaviour
                 //drawing it in white to differenciate this square for the one that follows the mouse
                 Debug.DrawLine(pos, points[(i + 1) % points.Length] + mousePos, Color.white, 1000f);
             }
-
         }
 
         //scaling the square down using the scroll wheel
@@ -79,6 +74,5 @@ public class SquareSpawner : MonoBehaviour
                 }
             }
         }
-
     }
 }
