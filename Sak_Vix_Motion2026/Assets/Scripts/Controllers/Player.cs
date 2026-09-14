@@ -20,7 +20,8 @@ public class Player : MonoBehaviour
 
         if (Keyboard.current.wKey.wasPressedThisFrame)
         {
-
+            Vector2 direction = (enemyTransform.position - transform.position);
+            WarpDrive(direction);
         }
     }
 
@@ -30,8 +31,8 @@ public class Player : MonoBehaviour
         bomb.transform.position = inOffSet;
     }
 
-    void PlayerJump(Vector2 movementAmount)
+    void WarpDrive(Vector2 direction)
     {
-        
+        transform.position += Vector3.Normalize(direction);
     }
 }
