@@ -11,21 +11,30 @@ public class Player : MonoBehaviour
     public Transform bombsTransform;
 
     //Task 1 variables
+    //a
     public Vector3 bombOffset;
+    //b
     public int numberOfTrailBombs;
     public float bombTrailSpacing;
+    public float setOfBombs = 0;
 
     void Update()
     {
-        Vector3 offset = transform.position + bombOffset;
+        
         if (Keyboard.current.bKey.wasPressedThisFrame)
         {
+
+            //adds the bombOffset to the players position
+            Vector3 offset = transform.position + bombOffset;
+            //passes the offset into the SpawnBombAtOffSet method
             SpawnBombAtOffSet(offset);
         }
 
         if (Keyboard.current.wKey.wasPressedThisFrame)
         {
+            //calculated the direction from the player to the enemy
             Vector3 direction = (enemyTransform.position - transform.position);
+            //passes the direction into the WarpDrive method
             WarpDrive(direction);
         }
 
@@ -47,10 +56,13 @@ public class Player : MonoBehaviour
     {
         for(int i = 0; i < inNumberOfBombs; i++)
         {
-            Vector3 startPos = transform.position + new Vector3 (0, inBombSpacing, 0);
+            //offsssets the bomb from the player position by the inBombSpacing and the setOfBombs variable
+            Vector3 startPos = transform.position + new Vector3 (0, inBombSpacing + setOfBombs, 0);
             GameObject bombs = Instantiate(bombPrefab);
+            //draws the bombs in a trail by ofsetting the positiion by bomb spacing in y according to the number of bombs in the trail
             bombs.transform.position = startPos + new Vector3( 0, i * inBombSpacing, 0);
         }
+        setOfBombs -= 1.5f;
     }
 
 
