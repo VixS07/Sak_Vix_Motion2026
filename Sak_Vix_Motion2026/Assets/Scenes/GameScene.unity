@@ -1248,11 +1248,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4504276444959460, guid: e3900e4d87ee29c43ad1d9098b51432c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.99
+      value: -3.25
       objectReference: {fileID: 0}
     - target: {fileID: 4504276444959460, guid: e3900e4d87ee29c43ad1d9098b51432c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.74
+      value: -2.21
       objectReference: {fileID: 0}
     - target: {fileID: 4504276444959460, guid: e3900e4d87ee29c43ad1d9098b51432c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3240,11 +3240,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4408196811525658, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.29
+      value: 4.49
       objectReference: {fileID: 0}
     - target: {fileID: 4408196811525658, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.24
+      value: 4.35
       objectReference: {fileID: 0}
     - target: {fileID: 4408196811525658, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3295,16 +3295,24 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
+      propertyPath: bombSpacing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: bombOffset.x
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: bombOffset.y
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: maxRadarRange
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
+      propertyPath: numberOfBombs
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: bombsTransform
@@ -3320,7 +3328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: bombTrailSpacing
-      value: 0.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: decelerationTime
