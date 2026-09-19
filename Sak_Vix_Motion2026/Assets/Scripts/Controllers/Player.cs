@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +18,9 @@ public class Player : MonoBehaviour
     public int numberOfTrailBombs;
     public float bombTrailSpacing;
     public float setOfBombs = 0;
+
+    //task 2 variables
+    public int distance;
 
     void Update()
     {
@@ -42,6 +46,11 @@ public class Player : MonoBehaviour
         {
             SpawnBombTrail(bombTrailSpacing, numberOfTrailBombs);
         }
+
+        if(Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            SpawnBombOnRandomCorner(distance);
+        }
     }
     //Task 1
     //a
@@ -66,7 +75,37 @@ public class Player : MonoBehaviour
     }
 
 
-    void WarpDrive(Vector3 direction)
+    //Task 2
+    public void SpawnBombOnRandomCorner(float inDistance)
+    {
+        Vector3 startPos = transform.position;
+        int corner = Random.Range(0, 4);
+        if(corner < 1)
+        {
+            GameObject bomb = Instantiate(bombPrefab);
+            bomb.transform.position = startPos + new Vector3(-inDistance, inDistance, 0);
+        }
+        else if (corner < 2)
+        {
+            GameObject bomb = Instantiate(bombPrefab);
+            bomb.transform.position = startPos + new Vector3(inDistance, inDistance, 0);
+        }
+        else if (corner < 3)
+        {
+            GameObject bomb = Instantiate(bombPrefab);
+            bomb.transform.position = startPos + new Vector3(inDistance, -inDistance, 0);
+        }
+        else
+        {
+            GameObject bomb = Instantiate(bombPrefab);
+            bomb.transform.position = startPos + new Vector3(-inDistance, -inDistance, 0);
+        }
+        Debug.Log(corner);
+    }
+
+    //Task 3
+
+    public void WarpDrive(Vector3 direction)
     {
         transform.position += Vector3.Normalize(direction);
     }
