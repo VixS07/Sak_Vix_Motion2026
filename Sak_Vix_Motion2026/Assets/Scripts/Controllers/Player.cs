@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
             //draws the bombs in a trail by offsetting the positiion by bomb spacing in y according to the number of bombs in the trail
             bombs.transform.position = startPos + new Vector3( 0, i * inBombSpacing, 0);
         }
-        setOfBombs -= 0.5f * inNumberOfBombs;
+        setOfBombs += inBombSpacing * inNumberOfBombs;
     }
 
 
