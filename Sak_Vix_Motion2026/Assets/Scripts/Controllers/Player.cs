@@ -56,13 +56,13 @@ public class Player : MonoBehaviour
     {
         for(int i = 0; i < inNumberOfBombs; i++)
         {
-            //offsssets the bomb from the player position by the inBombSpacing and the setOfBombs variable
+            //offsets the bomb from the player position by the inBombSpacing and the setOfBombs variable
             Vector3 startPos = transform.position + new Vector3 (0, inBombSpacing + setOfBombs, 0);
             GameObject bombs = Instantiate(bombPrefab);
-            //draws the bombs in a trail by ofsetting the positiion by bomb spacing in y according to the number of bombs in the trail
+            //draws the bombs in a trail by offsetting the positiion by bomb spacing in y according to the number of bombs in the trail
             bombs.transform.position = startPos + new Vector3( 0, i * inBombSpacing, 0);
         }
-        setOfBombs -= 1.5f;
+        setOfBombs -= 0.5f * inNumberOfBombs;
     }
 
 
