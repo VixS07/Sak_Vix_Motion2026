@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
@@ -22,9 +23,15 @@ public class Player : MonoBehaviour
     //task 2 variables
     public int distance;
 
+    //task 3
+    public float ratio;
+
+    //task4
+    public float inMaxRange = 2.5f;
+    public List<Transform>inAsteroids;
+
     void Update()
     {
-        
         if (Keyboard.current.bKey.wasPressedThisFrame)
         {
 
@@ -36,10 +43,7 @@ public class Player : MonoBehaviour
 
         if (Keyboard.current.wKey.wasPressedThisFrame)
         {
-            //calculated the direction from the player to the enemy
-            Vector3 direction = (enemyTransform.position - transform.position);
-            //passes the direction into the WarpDrive method
-            WarpDrive(direction);
+            WarpPlayer(enemyTransform, ratio);
         }
 
         if (Keyboard.current.tKey.wasPressedThisFrame)
@@ -49,8 +53,15 @@ public class Player : MonoBehaviour
 
         if(Keyboard.current.rKey.wasPressedThisFrame)
         {
-            SpawnBombOnRandomCorner(distance);
+            SpawnBombOnRandomCorner(distance); 
         }
+
+
+            //https://stackoverflow.com/questions/66733504/get-a-list-of-transforms-in-unity
+
+            inAsteroids = GameObject.FindGameObjectsWithTag("Asteroid").Select(go => go.transform).ToList();
+            DetectAsteroids(inMaxRange, inAsteroids);
+        
     }
     //Task 1
     //a
@@ -105,8 +116,29 @@ public class Player : MonoBehaviour
 
     //Task 3
 
-    public void WarpDrive(Vector3 direction)
+    public void WarpPlayer(Transform target, float ratio)
     {
-        transform.position += Vector3.Normalize(direction);
+        //moving the player towards the enemy
+        if (ratio <= 1)
+        {
+            transform.position = Vector3.Lerp(transform.position, target.position, ratio);
+        }
+    }
+
+    //Task 4
+    public void DetectAsteroids(float inMaxRange, List<Transform> inAsteroids)
+    {
+        //https://grabthiscode.com/csharp/how-to-get-the-length-list-in-c-unity
+
+        for (int i = 0; i < inAsteroids.Count; i++)
+        {
+            if (Vector3.Distance(transform.position, inAsteroids[i].position) <= inMaxRange)
+            {
+                Debug.DrawLine(transform.position, 
+                    (transform.position + (Vector3.Normalize(inAsteroids[i].position - transform.position) * 2.5f)), 
+                    Color.purple);
+            }
+        }
     }
 }
+
