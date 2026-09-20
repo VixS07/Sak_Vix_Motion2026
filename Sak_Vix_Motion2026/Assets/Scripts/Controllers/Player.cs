@@ -137,7 +137,7 @@ public class Player : MonoBehaviour
                 Debug.DrawLine(transform.position, 
                     (transform.position + (Vector3.Normalize(inAsteroids[i].position - transform.position) * 2.5f)), 
                     Color.purple);
-            }
+            } 
         }
     }
 }
