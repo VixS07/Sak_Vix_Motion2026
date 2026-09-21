@@ -7,8 +7,17 @@ public class Stars : MonoBehaviour
     public List<Transform> starTransforms;
     public float drawingTime;
 
-    // Update is called once per frame
+    // Update is called once per frame, use the velocity stuff for the generation o the line
     void Update()
     {
+        drawConstellation();
+    }
+
+    public void drawConstellation()
+    {
+        for(int i = 0; i < starTransforms.Count; i++)
+        {
+
+        }
     }
 }

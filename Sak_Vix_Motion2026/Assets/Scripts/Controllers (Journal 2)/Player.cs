@@ -19,19 +19,32 @@ public class Player : MonoBehaviour
     public int numberOfTrailBombs;
     public float bombTrailSpacing;
     public float setOfBombs = 0;
-
     //task 2 variables
     public int distance;
-
     //task 3
     public float ratio;
-
     //task4
     public float inMaxRange = 2.5f;
     public List<Transform>inAsteroids;
 
+    //week 3
+    public Vector3 currentVelocity;
+    public float speed;
+    public float accelerationTime;
+    public float decelerationTime;
+    public float currentAcceleration;
+    float deceleration;
+    public Vector3 maxSpeed = new Vector3(3,3,3);
+
+    void Start()
+    {
+        currentAcceleration = speed / accelerationTime;
+        deceleration = speed / decelerationTime;
+    }
+
     void Update()
     {
+        //Journal 2 
         if (Keyboard.current.bKey.wasPressedThisFrame)
         {
 
@@ -40,28 +53,26 @@ public class Player : MonoBehaviour
             //passes the offset into the SpawnBombAtOffSet method
             SpawnBombAtOffSet(offset);
         }
-
         if (Keyboard.current.wKey.wasPressedThisFrame)
         {
             WarpPlayer(enemyTransform, ratio);
         }
-
         if (Keyboard.current.tKey.wasPressedThisFrame)
         {
             SpawnBombTrail(bombTrailSpacing, numberOfTrailBombs);
         }
-
         if(Keyboard.current.rKey.wasPressedThisFrame)
         {
             SpawnBombOnRandomCorner(distance); 
         }
-
-
             //https://stackoverflow.com/questions/66733504/get-a-list-of-transforms-in-unity
 
             inAsteroids = GameObject.FindGameObjectsWithTag("Asteroid").Select(go => go.transform).ToList();
             DetectAsteroids(inMaxRange, inAsteroids);
-        
+
+        //week 3
+        PlayerMovement();
+
     }
     //Task 1
     //a
@@ -139,6 +150,36 @@ public class Player : MonoBehaviour
                     Color.purple);
             } 
         }
+    }
+
+    public void PlayerMovement()
+    {
+        Vector3 accelerationDirection = Vector3.zero;
+        if (Keyboard.current.upArrowKey.isPressed)
+        {
+            accelerationDirection += Vector3.up;
+        }
+        else if (Keyboard.current.downArrowKey.isPressed)
+        {
+            accelerationDirection += Vector3.down;
+        }
+        else if (Keyboard.current.leftArrowKey.isPressed)
+        {
+            accelerationDirection += Vector3.left; 
+        }
+        else if(Keyboard.current.rightArrowKey.isPressed)
+        {
+            accelerationDirection += Vector3.right;
+        }
+
+        currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+
+        //taken from Ryan 
+        currentVelocity = Vector3.Min(currentVelocity, maxSpeed);
+        currentVelocity = Vector3.Max(currentVelocity, -maxSpeed);
+
+        transform.position += currentVelocity * Time.deltaTime;
+
     }
 }
 
