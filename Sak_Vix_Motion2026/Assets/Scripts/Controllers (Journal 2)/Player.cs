@@ -37,6 +37,11 @@ public class Player : MonoBehaviour
     public float maxSpeed;
     float deceleration;
 
+
+    //week 4
+    public int radius;
+    public List<int> circlePoints;
+
     void Start()
     {
         currentAcceleration = speed / accelerationTime;
@@ -45,6 +50,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        //week 4
+
+        EnemyRadar(radius, circlePoints);
+
         //week 3
         PlayerMovement();
 
@@ -219,6 +228,25 @@ public class Player : MonoBehaviour
         transform.position += currentVelocity * Time.deltaTime;
     }
 
+    //week 4
+
+    public void EnemyRadar(float radius, List <int> circlePoints)
+    {
+        for(int i = 0; i < circlePoints.Count; i++)
+        {
+            if (i == circlePoints.Count)
+            {
+                i = 0;
+            }
+
+            Vector3 startPoint = new Vector3((Mathf.Cos(circlePoints[i]) * Mathf.Deg2Rad), 
+                (Mathf.Sin(circlePoints[i]) * Mathf.Deg2Rad),0);
+            Vector3 nextpoint = new Vector3((Mathf.Cos(circlePoints[i + 1]) * Mathf.Deg2Rad), 
+                (Mathf.Sin(circlePoints[i +1]) * Mathf.Deg2Rad), 0);
+            Debug.DrawLine(startPoint, nextpoint);
+
+        }
+    }
 }
 
 
