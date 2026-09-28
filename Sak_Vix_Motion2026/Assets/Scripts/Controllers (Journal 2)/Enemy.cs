@@ -1,10 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Enemy : MonoBehaviour
 {
-    private void Update()
+    private void Start()
     {
+        
     }
-
 }
+
+

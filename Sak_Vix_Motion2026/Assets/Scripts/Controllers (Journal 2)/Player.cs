@@ -33,8 +33,9 @@ public class Player : MonoBehaviour
     public float accelerationTime;
     public float decelerationTime;
     public float currentAcceleration;
+
+    public float maxSpeed;
     float deceleration;
-    public Vector3 maxSpeed = new Vector3(3,3,3);
 
     void Start()
     {
@@ -44,10 +45,12 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        //week 3
+        PlayerMovement();
+
         //Journal 2 
         if (Keyboard.current.bKey.wasPressedThisFrame)
         {
-
             //adds the bombOffset to the players position
             Vector3 offset = transform.position + bombOffset;
             //passes the offset into the SpawnBombAtOffSet method
@@ -69,10 +72,6 @@ public class Player : MonoBehaviour
 
             inAsteroids = GameObject.FindGameObjectsWithTag("Asteroid").Select(go => go.transform).ToList();
             DetectAsteroids(inMaxRange, inAsteroids);
-
-        //week 3
-        PlayerMovement();
-
     }
     //Task 1
     //a
@@ -155,31 +154,73 @@ public class Player : MonoBehaviour
     public void PlayerMovement()
     {
         Vector3 accelerationDirection = Vector3.zero;
-        if (Keyboard.current.upArrowKey.isPressed)
-        {
-            accelerationDirection += Vector3.up;
-        }
-        else if (Keyboard.current.downArrowKey.isPressed)
-        {
-            accelerationDirection += Vector3.down;
-        }
-        else if (Keyboard.current.leftArrowKey.isPressed)
-        {
-            accelerationDirection += Vector3.left; 
-        }
-        else if(Keyboard.current.rightArrowKey.isPressed)
-        {
-            accelerationDirection += Vector3.right;
-        }
+            if (Keyboard.current.upArrowKey.isPressed)
+            {
+                accelerationDirection += Vector3.up;
+                currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+            }
+            if (Keyboard.current.downArrowKey.isPressed)
+            {
+                accelerationDirection += Vector3.down;
+                currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+            }
+            if (Keyboard.current.leftArrowKey.isPressed)
+            {
+                accelerationDirection += Vector3.left;
+                currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+            }
+            if (Keyboard.current.rightArrowKey.isPressed)
+            {
+                accelerationDirection += Vector3.right;
+                currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+            }
 
-        currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+            if (currentVelocity.x >= maxSpeed)
+            {
+                currentVelocity.x = maxSpeed;
+            }
+            if (currentVelocity.y >= maxSpeed)
+            {
+                currentVelocity.y = maxSpeed;
+            }
+            if (currentVelocity.x <= -maxSpeed)
+            {
+                currentVelocity.x = -maxSpeed;
+            }
+            if (currentVelocity.y <= -maxSpeed)
+            {
+                currentVelocity.y = -maxSpeed;
+            }
 
-        //taken from Ryan 
-        currentVelocity = Vector3.Min(currentVelocity, maxSpeed);
-        currentVelocity = Vector3.Max(currentVelocity, -maxSpeed);
+
+            if (!Keyboard.current.upArrowKey.isPressed && currentVelocity.y > 0)
+            {
+                accelerationDirection += Vector3.down;
+                currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
+            }
+            if (!Keyboard.current.downArrowKey.isPressed && currentVelocity.y < 0)
+            {
+                accelerationDirection += Vector3.up;
+                currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
+            }
+            if (!Keyboard.current.leftArrowKey.isPressed && currentVelocity.x < 0)
+            {
+                accelerationDirection += Vector3.right;
+                currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
+            }
+            if (!Keyboard.current.rightArrowKey.isPressed && currentVelocity.x > 0)
+            {
+                accelerationDirection += Vector3.left;
+                currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
+            }
+
+        
 
         transform.position += currentVelocity * Time.deltaTime;
-
     }
+
 }
+
+
+
 
