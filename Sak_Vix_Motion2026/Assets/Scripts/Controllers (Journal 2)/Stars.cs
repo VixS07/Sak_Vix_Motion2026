@@ -6,18 +6,37 @@ public class Stars : MonoBehaviour
 {
     public List<Transform> starTransforms;
     public float drawingTime;
+    public Vector2 starPos;
+    public int i;
+    public Vector2 movementDirection;
 
-    // Update is called once per frame, use the velocity stuff for the generation o the line
+    void Start()
+    {
+        starPos = starTransforms[0].position;
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        drawConstellation();
+        DrawConstellation();
+
     }
 
-    public void drawConstellation()
+    void DrawConstellation()
     {
-        for(int i = 0; i < starTransforms.Count; i++)
-        {
+        Vector2 movementDirection = (starTransforms[i].position - (Vector3)starPos).normalized * drawingTime * Time.deltaTime;
+        starPos += movementDirection;
 
+        if (Vector2.Distance(starPos, starTransforms[i].position) <= 0.1f)
+        {
+            i++;
+            if (i == starTransforms.Count)
+            {
+                i = 0;
+            }
         }
+
+        Debug.DrawLine(starPos, starTransforms[i - 1].position, Color.white);
     }
 }
+
