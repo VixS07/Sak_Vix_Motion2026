@@ -234,22 +234,28 @@ public class Player : MonoBehaviour
 
     public void EnemyRadar(float radius, int circlePoints)
     {
-
+        //a variable which calculates how far apart the points will be from eachother
         int pointDist = 360 / circlePoints;
 
-        //draw as long as tracker number (the one thats incrimenting by points) is less than 360?
-        for (int i = 0; i < 360; i += pointDist)
+        //place points for the lines as long as the point location is below or equal to 360, incrimented by our distance variable
+        for (int i = 0; i <= 360; i += pointDist)
         {
+            //calculate where the next spot will be, if this one is over 360, put it back to 360/0 (they're at the same position)
             int nextSpot = i + pointDist;
             if (nextSpot > 360)
             {
                 nextSpot = 0;
             }
+
+            //calculate the angles / where these points are on the circle
             Vector3 startPoint = new Vector3(Mathf.Cos((i) * Mathf.Deg2Rad), Mathf.Sin((i) * Mathf.Deg2Rad), 0);
             Vector3 nextPoint = new Vector3(Mathf.Cos((nextSpot) * Mathf.Deg2Rad), Mathf.Sin((nextSpot) * Mathf.Deg2Rad), 0);
+            //draw out green circle like shape using the points. Moving them over to the player, then away by our radius value
             Debug.DrawLine(startPoint * radius + transform.position, nextPoint * radius + transform.position, Color.green);
+            //checking if the enemy is within range of our circle
             if (Vector3.Distance(transform.position, enemyTransform.position) <= radius)
             {
+                //if they are, make the circle red instead (idk why this one has brackets, it does the same thing with or without them
                 Debug.DrawLine((startPoint * radius) + transform.position, (nextPoint * radius) + transform.position, Color.red);
             }
         }
@@ -258,19 +264,26 @@ public class Player : MonoBehaviour
 
     public void SpawnPowerups(float radius, int numberOfPowerups)
     {
+        //a variable which calculates how far apart the points will be from eachother
         int pointDist = 360 / numberOfPowerups;
-            for (int i = 0; i < 360; i += pointDist)
-            {
-                int nextSpot = i + pointDist;
+              //place points for the lines as long as the point location is below or equal to 360, incrimented by our distance variable
+        for (int i = 0; i <= 360; i += pointDist)
+         {
+            //calculate where the next spot will be, if this one is over 360, put it back to 360/0 (they're at the same position)
+            int nextSpot = i + pointDist;
                 if (nextSpot > 360)
                 {
                     nextSpot = 0;
                 }
+
+                //calculate where on the circle/what angle they would be at
                 Vector3 spawnPoint = new Vector3(Mathf.Cos((i) * Mathf.Deg2Rad), Mathf.Sin((i) * Mathf.Deg2Rad), 0);
+                //create the power up object
                 GameObject powerUp = Instantiate(powerUpPrefab);
+                //move the power up over to the player, then towards the angle and away by our radius value
                 powerUp.transform.position = transform.position + spawnPoint * radius;
 
-            }
+          }
         }
 
 }
