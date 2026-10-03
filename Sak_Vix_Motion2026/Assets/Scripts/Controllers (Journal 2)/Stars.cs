@@ -19,7 +19,6 @@ public class Stars : MonoBehaviour
     void Update()
     {
         DrawConstellation();
-
     }
 
     void DrawConstellation()

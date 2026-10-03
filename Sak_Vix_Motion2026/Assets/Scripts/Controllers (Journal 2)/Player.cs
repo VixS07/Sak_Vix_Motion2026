@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     public float ratio;
     //task4
     public float inMaxRange = 2.5f;
-    public List<Transform>inAsteroids;
+    public List<Transform> inAsteroids;
 
     //week 3
     public Vector3 currentVelocity;
@@ -40,7 +40,8 @@ public class Player : MonoBehaviour
 
     //week 4
     public int radius;
-    public List<int> circlePoints;
+    public int circlePoints;
+    public int numberOfPowerups;
 
     void Start()
     {
@@ -51,8 +52,8 @@ public class Player : MonoBehaviour
     void Update()
     {
         //week 4
-
-        EnemyRadar(radius, circlePoints);
+        SpawnPowerups(radius, numberOfPowerups);
+        //EnemyRadar(radius, circlePoints);
 
         //week 3
         PlayerMovement();
@@ -73,33 +74,33 @@ public class Player : MonoBehaviour
         {
             SpawnBombTrail(bombTrailSpacing, numberOfTrailBombs);
         }
-        if(Keyboard.current.rKey.wasPressedThisFrame)
+        if (Keyboard.current.rKey.wasPressedThisFrame)
         {
-            SpawnBombOnRandomCorner(distance); 
+            SpawnBombOnRandomCorner(distance);
         }
-            //https://stackoverflow.com/questions/66733504/get-a-list-of-transforms-in-unity
+        //https://stackoverflow.com/questions/66733504/get-a-list-of-transforms-in-unity
 
-            inAsteroids = GameObject.FindGameObjectsWithTag("Asteroid").Select(go => go.transform).ToList();
-            DetectAsteroids(inMaxRange, inAsteroids);
+        inAsteroids = GameObject.FindGameObjectsWithTag("Asteroid").Select(go => go.transform).ToList();
+        DetectAsteroids(inMaxRange, inAsteroids);
     }
     //Task 1
     //a
     public void SpawnBombAtOffSet(Vector2 inOffSet)
     {
-        GameObject bomb =Instantiate(bombPrefab);
+        GameObject bomb = Instantiate(bombPrefab);
         bomb.transform.position = inOffSet;
     }
 
     //b
     public void SpawnBombTrail(float inBombSpacing, int inNumberOfBombs)
     {
-        for(int i = 0; i < inNumberOfBombs; i++)
+        for (int i = 0; i < inNumberOfBombs; i++)
         {
             //offsets the bomb from the player position by the inBombSpacing and the setOfBombs variable
-            Vector3 startPos = transform.position + new Vector3 (0, inBombSpacing + setOfBombs, 0);
+            Vector3 startPos = transform.position + new Vector3(0, inBombSpacing + setOfBombs, 0);
             GameObject bombs = Instantiate(bombPrefab);
             //draws the bombs in a trail by offsetting the positiion by bomb spacing in y according to the number of bombs in the trail
-            bombs.transform.position = startPos + new Vector3( 0, i * inBombSpacing, 0);
+            bombs.transform.position = startPos + new Vector3(0, i * inBombSpacing, 0);
         }
         setOfBombs += inBombSpacing * inNumberOfBombs;
     }
@@ -110,7 +111,7 @@ public class Player : MonoBehaviour
     {
         Vector3 startPos = transform.position;
         int corner = Random.Range(0, 4);
-        if(corner < 1)
+        if (corner < 1)
         {
             GameObject bomb = Instantiate(bombPrefab);
             bomb.transform.position = startPos + new Vector3(-inDistance, inDistance, 0);
@@ -153,98 +154,119 @@ public class Player : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, inAsteroids[i].position) <= inMaxRange)
             {
-                Debug.DrawLine(transform.position, 
-                    (transform.position + (Vector3.Normalize(inAsteroids[i].position - transform.position) * 2.5f)), 
+                Debug.DrawLine(transform.position,
+                    (transform.position + (Vector3.Normalize(inAsteroids[i].position - transform.position) * 2.5f)),
                     Color.purple);
-            } 
+            }
         }
     }
 
     public void PlayerMovement()
     {
         Vector3 accelerationDirection = Vector3.zero;
-            if (Keyboard.current.upArrowKey.isPressed)
-            {
-                accelerationDirection += Vector3.up;
-                currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
-            }
-            if (Keyboard.current.downArrowKey.isPressed)
-            {
-                accelerationDirection += Vector3.down;
-                currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
-            }
-            if (Keyboard.current.leftArrowKey.isPressed)
-            {
-                accelerationDirection += Vector3.left;
-                currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
-            }
-            if (Keyboard.current.rightArrowKey.isPressed)
-            {
-                accelerationDirection += Vector3.right;
-                currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
-            }
+        if (Keyboard.current.upArrowKey.isPressed)
+        {
+            accelerationDirection += Vector3.up;
+            currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+        }
+        if (Keyboard.current.downArrowKey.isPressed)
+        {
+            accelerationDirection += Vector3.down;
+            currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+        }
+        if (Keyboard.current.leftArrowKey.isPressed)
+        {
+            accelerationDirection += Vector3.left;
+            currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+        }
+        if (Keyboard.current.rightArrowKey.isPressed)
+        {
+            accelerationDirection += Vector3.right;
+            currentVelocity += accelerationDirection.normalized * currentAcceleration * Time.deltaTime;
+        }
 
-            if (currentVelocity.x >= maxSpeed)
-            {
-                currentVelocity.x = maxSpeed;
-            }
-            if (currentVelocity.y >= maxSpeed)
-            {
-                currentVelocity.y = maxSpeed;
-            }
-            if (currentVelocity.x <= -maxSpeed)
-            {
-                currentVelocity.x = -maxSpeed;
-            }
-            if (currentVelocity.y <= -maxSpeed)
-            {
-                currentVelocity.y = -maxSpeed;
-            }
+        if (currentVelocity.x >= maxSpeed)
+        {
+            currentVelocity.x = maxSpeed;
+        }
+        if (currentVelocity.y >= maxSpeed)
+        {
+            currentVelocity.y = maxSpeed;
+        }
+        if (currentVelocity.x <= -maxSpeed)
+        {
+            currentVelocity.x = -maxSpeed;
+        }
+        if (currentVelocity.y <= -maxSpeed)
+        {
+            currentVelocity.y = -maxSpeed;
+        }
 
 
-            if (!Keyboard.current.upArrowKey.isPressed && currentVelocity.y > 0)
-            {
-                accelerationDirection += Vector3.down;
-                currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
-            }
-            if (!Keyboard.current.downArrowKey.isPressed && currentVelocity.y < 0)
-            {
-                accelerationDirection += Vector3.up;
-                currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
-            }
-            if (!Keyboard.current.leftArrowKey.isPressed && currentVelocity.x < 0)
-            {
-                accelerationDirection += Vector3.right;
-                currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
-            }
-            if (!Keyboard.current.rightArrowKey.isPressed && currentVelocity.x > 0)
-            {
-                accelerationDirection += Vector3.left;
-                currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
-            }
-
-        
-
+        if (!Keyboard.current.upArrowKey.isPressed && currentVelocity.y > 0)
+        {
+            accelerationDirection += Vector3.down;
+            currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
+        }
+        if (!Keyboard.current.downArrowKey.isPressed && currentVelocity.y < 0)
+        {
+            accelerationDirection += Vector3.up;
+            currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
+        }
+        if (!Keyboard.current.leftArrowKey.isPressed && currentVelocity.x < 0)
+        {
+            accelerationDirection += Vector3.right;
+            currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
+        }
+        if (!Keyboard.current.rightArrowKey.isPressed && currentVelocity.x > 0)
+        {
+            accelerationDirection += Vector3.left;
+            currentVelocity += accelerationDirection.normalized * deceleration * Time.deltaTime;
+        }
         transform.position += currentVelocity * Time.deltaTime;
     }
 
     //week 4
 
-    public void EnemyRadar(float radius, List <int> circlePoints)
+    public void EnemyRadar(float radius, int circlePoints)
     {
-        for(int i = 0; i < circlePoints.Count; i++)
+
+        int pointDist = 360 / circlePoints;
+
+        //draw as long as tracker number (the one thats incrimenting by points) is less than 360?
+        for (int i = 0; i < 360; i += pointDist)
         {
-            if (i == circlePoints.Count)
+            int nextSpot = i + pointDist;
+            if (nextSpot > 360)
             {
-                i = 0;
+                nextSpot = 0;
             }
+            Vector3 startPoint = new Vector3(Mathf.Cos((i) * Mathf.Deg2Rad), Mathf.Sin((i) * Mathf.Deg2Rad), 0);
+            Vector3 nextPoint = new Vector3(Mathf.Cos((nextSpot) * Mathf.Deg2Rad), Mathf.Sin((nextSpot) * Mathf.Deg2Rad), 0);
+            Debug.DrawLine(startPoint * radius + transform.position, nextPoint * radius + transform.position, Color.green);
+            if (Vector3.Distance(transform.position, enemyTransform.position) <= radius)
+            {
+                Debug.DrawLine((startPoint * radius) + transform.position, (nextPoint * radius) + transform.position, Color.red);
+            }
+        }
 
-            Vector3 startPoint = new Vector3((Mathf.Cos(circlePoints[i]) * Mathf.Deg2Rad), 
-                (Mathf.Sin(circlePoints[i]) * Mathf.Deg2Rad),0);
-            Vector3 nextpoint = new Vector3((Mathf.Cos(circlePoints[i + 1]) * Mathf.Deg2Rad), 
-                (Mathf.Sin(circlePoints[i +1]) * Mathf.Deg2Rad), 0);
-            Debug.DrawLine(startPoint, nextpoint);
+    }
 
+    public void SpawnPowerups(float radius, int numberOfPowerups)
+    {
+        int pointDist = 360 / numberOfPowerups;
+        {
+            for (int i = 0; i < 360; i += pointDist)
+            {
+                int nextSpot = i + pointDist;
+                if (nextSpot > 360)
+                {
+                    nextSpot = 0;
+                }
+
+
+
+            }
         }
     }
 }
