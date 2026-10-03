@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
     public int radius;
     public int circlePoints;
     public int numberOfPowerups;
+    public GameObject powerUpPrefab;
 
     void Start()
     {
@@ -52,7 +53,10 @@ public class Player : MonoBehaviour
     void Update()
     {
         //week 4
-        SpawnPowerups(radius, numberOfPowerups);
+        if (Keyboard.current.kKey.wasPressedThisFrame)
+        {
+            SpawnPowerups(radius, numberOfPowerups);
+        }
         //EnemyRadar(radius, circlePoints);
 
         //week 3
@@ -255,7 +259,6 @@ public class Player : MonoBehaviour
     public void SpawnPowerups(float radius, int numberOfPowerups)
     {
         int pointDist = 360 / numberOfPowerups;
-        {
             for (int i = 0; i < 360; i += pointDist)
             {
                 int nextSpot = i + pointDist;
@@ -263,12 +266,13 @@ public class Player : MonoBehaviour
                 {
                     nextSpot = 0;
                 }
-
-
+                Vector3 spawnPoint = new Vector3(Mathf.Cos((i) * Mathf.Deg2Rad), Mathf.Sin((i) * Mathf.Deg2Rad), 0);
+                GameObject powerUp = Instantiate(powerUpPrefab);
+                powerUp.transform.position = transform.position + spawnPoint * radius;
 
             }
         }
-    }
+
 }
 
 
