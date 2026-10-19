@@ -32,6 +32,8 @@ public class BigSpider : MonoBehaviour
     float playerAngle;
     float spiderAngle;
     public int rotationSpeed;
+    public float buffer;
+    float spawnBuffer;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -165,6 +167,9 @@ public class BigSpider : MonoBehaviour
             //start movement
             move = true;
 
+            //get egg buffr number
+            spawnBuffer = Random.Range(1, buffer);
+
             t = 0;
         }
 
@@ -181,7 +186,7 @@ public class BigSpider : MonoBehaviour
         //find out where the spider is supposed to be looking
         lookingDirection = endPos - (Vector2)spider.transform.position;
         spiderAngle = (Mathf.Atan2(lookingDirection.y, lookingDirection.x) * Mathf.Rad2Deg);
-        //look that way
+        ////look that way
         spider.transform.eulerAngles = new Vector3(0, 0, spiderAngle - 90f);
 
     }
@@ -208,9 +213,17 @@ public class BigSpider : MonoBehaviour
         //if we finished moving and we have point sin our list
         if (!move && added)
         {
+            
             //keep the line drawn, stop the counter (prevents spider from re-spawning and changing the line)
             Debug.DrawLine(linePoints[0], linePoints[1], Color.ghostWhite);
             count = false;
+            //cleanup and reset when egg is squished
+            if (egg == null)
+            {
+                linePoints.Clear();
+                count = true;
+                added = false;
+            }
         }
 
     }
@@ -221,9 +234,10 @@ public class BigSpider : MonoBehaviour
 
         //calculate the middle of the path for the spider
         //since it will often be a diagonal we cant just use screen height
-        float midOfPath = (startPos.y + endPos.y) / 2;
+        float travelled = Vector2.Distance(startPos, spider.transform.position);
+        float eggTarget = (Vector2.Distance(startPos, endPos)) / 2 + 4;
         //if were at around the middle of the path (it will virtually never be exact), and we dont have an egg
-        if (spider.transform.position.y > midOfPath - 1 && spider.transform.position.y < midOfPath + 1 && egg == null)
+        if (travelled > eggTarget - spawnBuffer && travelled < eggTarget + spawnBuffer && egg == null)
         {
             //spawn the egg
             egg = Instantiate(eggPrefab);
@@ -238,9 +252,10 @@ public class BigSpider : MonoBehaviour
             //figure out where were supposed to look
             lookingDirection = egg.transform.position - player.transform.position;
             playerAngle = (Mathf.Atan2(lookingDirection.y, lookingDirection.x) * Mathf.Rad2Deg);
-            //look towards the egg
+            ////look towards the egg
             player.transform.eulerAngles = new Vector3(0, 0, playerAngle - 90f);
         }
+
     }
 
     public void SquishEgg()
@@ -253,12 +268,6 @@ public class BigSpider : MonoBehaviour
             {
                 //delete the object
                 Destroy(egg);
-                //clear the list, and therefore delete the web line
-                linePoints.Clear();
-                //restart the timer
-                count = true;
-                //state that we have cleared the list
-                added = false;
 
             }
         }
