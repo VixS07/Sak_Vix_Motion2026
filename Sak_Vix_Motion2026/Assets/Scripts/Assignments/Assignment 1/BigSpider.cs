@@ -30,13 +30,15 @@ public class BigSpider : MonoBehaviour
     bool added;
     bool count = true;
     bool spawnedEgg;
+    float playerAngle;
+    float spiderAngle;
+    public int rotationSpeed;
 
-    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -52,6 +54,7 @@ public class BigSpider : MonoBehaviour
         Web();
         Eggs();
         SquishEgg();
+        LookStraight();
     }
 
     public void spawnPoints()
@@ -114,8 +117,9 @@ public class BigSpider : MonoBehaviour
 
     public void SpiderMovement()
     {
+        Vector2 lookingDirection;
 
-
+        //Vector mechs
         if (!spawned)
         {
             spider = Instantiate(spiderPrefab);
@@ -127,16 +131,16 @@ public class BigSpider : MonoBehaviour
             t += Time.deltaTime;
         }
 
-        if(t >= spawnInterval)
+        if (t >= spawnInterval)
         {
             endPos = pointTransforms[Random.Range(0, 5)].transform.position;
-            startPos = pointTransforms[Random.Range(5,10)].transform.position;
+            startPos = pointTransforms[Random.Range(5, 10)].transform.position;
 
             spider.transform.position = startPos;
 
-            direction = (endPos - startPos).normalized; 
+            direction = (endPos - startPos).normalized;
             move = true;
-  
+
             t = 0;
         }
 
@@ -145,6 +149,12 @@ public class BigSpider : MonoBehaviour
             spider.transform.position += (Vector3)(direction * spiderSpeed * Time.deltaTime);
 
         }
+
+        //rotation mechs
+        lookingDirection = endPos - (Vector2)spider.transform.position;
+        spiderAngle = (Mathf.Atan2(lookingDirection.y, lookingDirection.x) * Mathf.Rad2Deg);
+        spider.transform.eulerAngles = new Vector3(0, 0, spiderAngle - 90f);
+
     }
 
     public void Web()
@@ -152,7 +162,7 @@ public class BigSpider : MonoBehaviour
         if (move)
         {
             Debug.DrawLine(startPos, spider.transform.position, Color.ghostWhite);
-            if(spider.transform.position.y > topRight.y + 5 && !added)
+            if (spider.transform.position.y > topRight.y + 5 && !added)
             {
                 linePoints.Add(startPos);
                 linePoints.Add(endPos);
@@ -160,7 +170,7 @@ public class BigSpider : MonoBehaviour
                 move = false;
             }
         }
-        if(!move && added)
+        if (!move && added)
         {
             Debug.DrawLine(linePoints[0], linePoints[1], Color.ghostWhite);
             count = false;
@@ -170,12 +180,20 @@ public class BigSpider : MonoBehaviour
 
     public void Eggs()
     {
+        Vector2 lookingDirection;
         float midOfPath = (startPos.y + endPos.y) / 2;
-        if(spider.transform.position.y > midOfPath - 1 && spider.transform.position.y < midOfPath + 1 && !spawnedEgg)
+        if (spider.transform.position.y > midOfPath - 1 && spider.transform.position.y < midOfPath + 1 && !spawnedEgg)
         {
             egg = Instantiate(eggPrefab);
             egg.transform.position = spider.transform.position;
             spawnedEgg = true;
+        }
+        if (egg != null)
+        {
+            //rotation mechs
+            lookingDirection = egg.transform.position - player.transform.position;
+            playerAngle = (Mathf.Atan2(lookingDirection.y, lookingDirection.x) * Mathf.Rad2Deg);
+            player.transform.eulerAngles = new Vector3(0, 0, playerAngle - 90f);
         }
     }
 
@@ -194,5 +212,29 @@ public class BigSpider : MonoBehaviour
 
             }
         }
+    }
+
+    public void LookStraight()
+    {
+        //using dot product, check if the player is looking left or right and then slowly rotate it so its looking upwards again
+        //are we left or right
+        float currentDirecttion = Vector2.Dot(player.transform.up, Vector2.right);
+        if (currentDirecttion > 0f)
+        {
+
+            if(player.transform.eulerAngles.z != 0 && egg == null)
+            {
+                player.transform.eulerAngles += new Vector3(0,0,1 * rotationSpeed * Time.deltaTime); 
+            }
+        }
+        if (currentDirecttion < 0f)
+        {
+
+            if (player.transform.eulerAngles.z != 0 && egg == null)
+            {
+                player.transform.eulerAngles -= new Vector3(0, 0, 1 * rotationSpeed * Time.deltaTime);
+            }
+        }
+
     }
 }

@@ -2773,9 +2773,10 @@ MonoBehaviour:
   pointTransforms: []
   pointAmount: 10
   spawnInterval: 8
-  t: 0
+  t: 8
   spiderSpeed: 10
   linePoints: []
+  rotationSpeed: 40
 --- !u!4 &1619422667
 Transform:
   m_ObjectHideFlags: 0
