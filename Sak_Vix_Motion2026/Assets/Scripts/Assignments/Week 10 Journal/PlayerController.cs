@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
     private void MovementUpdate(Vector2 playerInput)
     {
-        currentVelocity = rb.linearVelocity;
+        currentVelocity.y = rb.linearVelocity.y;
         //acceleration
         currentVelocity.x += playerInput.normalized.x * maxAcceleration * Time.deltaTime;
 
