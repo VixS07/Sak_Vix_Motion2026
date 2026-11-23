@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     bool wasJumpTriggered;
     bool stayOnGround;
-    
+    public float terminalSpeed;
     FacingDirection current;
     public enum FacingDirection
     {
@@ -101,6 +101,11 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded())
         {
             currentVelocity.y += gravity * Time.deltaTime;
+        }
+
+        if (currentVelocity.y < terminalSpeed)
+        {
+            currentVelocity.y = terminalSpeed;
         }
 
         //moving the rigid body
