@@ -18,6 +18,15 @@ public class PlayerController : MonoBehaviour
     public float groundDist;
     public LayerMask ground;
 
+    //gravity implimentation
+    public float gravity;
+    public float apexHeight;
+    public float apexTime;
+    public float InitialJumpVelocity;
+
+    bool wasJumpTriggered;
+    bool stayOnGround;
+    
     FacingDirection current;
     public enum FacingDirection
     {
@@ -27,26 +36,40 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //movement
         rb = GetComponent<Rigidbody2D>();
         maxAcceleration = maxSpeed / accelerationTime;
         maxDeceleration = maxSpeed / decelerationTime;
+
+        //gravity
+        gravity = -2 * apexHeight / ((apexTime)*(apexTime));
+        InitialJumpVelocity = 2 * apexHeight / apexTime;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //The input from the player needs to be determined and then passed in the to the MovementUpdate which should
         //manage the actual movement of the character.
         MovementUpdate(playerInput);
+        Debug.Log(IsGrounded());
+    }
+
+    void Update()
+    {
+        if (playerInput.y > 0 && IsGrounded())
+        {
+            stayOnGround = false;
+            wasJumpTriggered = true;
+        }
     }
 
     private void MovementUpdate(Vector2 playerInput)
     {
+        currentVelocity = rb.linearVelocity;
         //acceleration
-        currentVelocity += playerInput.normalized * maxAcceleration * Time.deltaTime;
-        //moving the rigid body
-        //https://docs.unity.com/en-us/engine/6000.3/script-reference/unityengine/rigidbody2d/linearvelocity
-        rb.linearVelocity = currentVelocity;
+        currentVelocity.x += playerInput.normalized.x * maxAcceleration * Time.deltaTime;
+
 
         //making sure we dont pass max
         if(currentVelocity.x > maxSpeed)
@@ -60,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
         if(playerInput == Vector2.zero)
         {
-            currentVelocity -= currentVelocity.normalized * maxDeceleration * Time.deltaTime;
+            currentVelocity.x -= currentVelocity.normalized.x * maxDeceleration * Time.deltaTime;
             //making sure we decelerate properly
             if(currentVelocity.x < 0.1f && currentVelocity.x > -0.1f)
             {
@@ -68,7 +91,21 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if (wasJumpTriggered)
+        {
+            currentVelocity.y = InitialJumpVelocity;
+            wasJumpTriggered = false;
+        }
 
+        //apply gravity
+        if (!IsGrounded())
+        {
+            currentVelocity.y += gravity * Time.deltaTime;
+        }
+
+        //moving the rigid body
+        //https://docs.unity.com/en-us/engine/6000.3/script-reference/unityengine/rigidbody2d/linearvelocity
+        rb.linearVelocity = currentVelocity;
     }
 
     public bool IsWalking()
@@ -118,7 +155,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //make sure were only moving horizontally
-        playerInput.y = 0f;
+        //playerInput.y = 0f;
     }
 
 }
